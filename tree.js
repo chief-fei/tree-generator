@@ -7,14 +7,14 @@ const treePath = function(dir) {
         name: path.basename(dir),
         str: path.basename(dir)
     }];
-    
+
     const render = function(name,isLast,deep){
         const line = deep.map(el=>`${el?'│':' '}  `).join('');
         const text = `${line}${isLast?'└─':'├─'} ${name}`;
         return {
             name: name,
             str: text
-        }; 
+        };
     }
 
     const tree = function(target,deep=[]){
@@ -28,13 +28,13 @@ const treePath = function(dir) {
                 return !dir.includes(reg);
             })
             if(flag){
-                if(stat.isFile()){ 
+                if(stat.isFile()){
                     file.push(el);
                 }else{
                     direct.push(el);
                 }
             }
-            
+
         })
         direct.forEach(function(el,i){
             const dir = path.join(target,el);
@@ -42,12 +42,13 @@ const treePath = function(dir) {
             treeArr.push(render(el,isLast,deep));
             tree(dir,[...deep,!isLast]);
         })
-        file.forEach(function(el,i){
+        // 忽略文件，只处理目录
+        /*file.forEach(function(el,i){
             const isLast = i === file.length -1;
             treeArr.push(render(el,isLast,deep));
-        })
+        })*/
     }
-    
+
     tree(dir);
     return treeArr;
 }
